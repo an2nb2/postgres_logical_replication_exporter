@@ -1,0 +1,24 @@
+repos:
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes
+  - repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: v3.1.0
+    hooks:
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: detect-aws-credentials
+      - id: forbid-new-submodules
+      - id: check-yaml
+  - repo: https://github.com/TekWizely/pre-commit-golang
+    rev: v1.0.0-beta.5
+    hooks:
+      - id: go-mod-tidy
+      - id: go-sec-mod
+        args: ['-exclude-dir=.direnv']
+      - id: go-staticcheck-mod
+      - id: go-vet-mod
+      - id: go-fmt
+      - id: go-imports
