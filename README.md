@@ -28,7 +28,7 @@ Both roles (on primary and standby instances) require superuser priveleges as th
 ## Available metrics
 
 | Metric                                         | Type  | Description                                                                             |
-|------------------------------------------------+-------+-----------------------------------------------------------------------------------------|
+|------------------------------------------------|-------|-----------------------------------------------------------------------------------------|
 | pg_logical_replication_subscription_status     | Guage | Status of subscription.                                                                 |
 | pg_logical_replication_subscription_lag_bytes  | Guage | The amount of WAL records generated in the primary, but not yet applied in the standby. |
 | pg_logical_replication_publication_status      | Guage | Status of publication.                                                                  |
