@@ -22,8 +22,8 @@ var (
 )
 
 func init() {
-	flag.StringVar(&primaryuri, "primary-uri", "", "URI of the primary instance host.")
-	flag.StringVar(&standbyuri, "standby-uri", "", "URI of the standby instance host.")
+	flag.StringVar(&primaryuri, "primary-uri", "", "Connection URI of the primary instance host.")
+	flag.StringVar(&standbyuri, "standby-uri", "", "Connection URI of the standby instance host.")
 	flag.StringVar(&addr, "listen-address", ":9394", "The address to listen on for HTTP requests.")
 	flag.StringVar(&loglevel, "log-level", "info", "Level of the logs.")
 }
