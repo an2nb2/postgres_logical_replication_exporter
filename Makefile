@@ -4,7 +4,7 @@ BINARY_NAME ?= exporter
 
 CGO_ENABLED = 0
 LDFLAGS     = -ldflags "-X main.version=${VERSION} -X main.commit=$$(git rev-parse --short HEAD 2>/dev/null || echo \"none\")"
-MOD         = -mod=mod
+MOD         = -mod=readonly
 
 COMPOSECLI = $(shell command -v nerdctl || command -v docker || command -v podman-compose)
 
