@@ -21,6 +21,8 @@ type Publication struct {
 	Tmp     bool          `db:"temporary"`
 }
 
+// Returns a list of postgres publications that already have replication slot created, i.e.
+// there is a subscription on standby instance side.
 func (db *DB) Publications() ([]Publication, error) {
 	var pubs []Publication
 	query := `
@@ -30,12 +32,14 @@ func (db *DB) Publications() ([]Publication, error) {
   `
 	err := db.Select(&pubs, query)
 	if err == sql.ErrNoRows {
-		return pubs, errors.New("no replication process is found")
+		return pubs, nil
 	}
 
 	return pubs, err
 }
 
+// Returns the current write-ahead log write location as a string.
+// When no replication exists it will return an error.
 func (db *DB) CurrentWalLsn() (string, error) {
 	var val sql.NullString
 	query := `
@@ -49,6 +53,7 @@ func (db *DB) CurrentWalLsn() (string, error) {
 	return val.String, err
 }
 
+// Returns a list of postgres replication slots.
 func (db *DB) ReplicationSlots() ([]ReplicationSlot, error) {
 	var slots []ReplicationSlot
 	query := `
@@ -56,7 +61,7 @@ func (db *DB) ReplicationSlots() ([]ReplicationSlot, error) {
   `
 	err := db.Select(&slots, query)
 	if err == sql.ErrNoRows {
-		return slots, errors.New("no replication slots are found")
+		return slots, nil
 	}
 
 	return slots, err

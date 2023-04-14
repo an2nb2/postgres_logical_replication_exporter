@@ -16,6 +16,9 @@ type DB struct {
 	Database string
 }
 
+// Tries to establish connection with database using given Connection URI and
+// returns a wrapped sqlx.DB structure with few more fields.
+// If it doesn't succeed to connect then it causes to exit with code 1.
 func MustConnect(uri string, poolSize int) *DB {
 	config, err := pgx.ParseURI(uri)
 

@@ -2,7 +2,6 @@ package pg
 
 import (
 	"database/sql"
-	"errors"
 )
 
 type Subscription struct {
@@ -13,6 +12,7 @@ type Subscription struct {
 	LastMsgReceiptTime string         `db:"last_msg_receipt_time"`
 }
 
+// Returns a list of postgres subscriptions.
 func (db *DB) Subscriptions() ([]Subscription, error) {
 	var subs []Subscription
 	query := `
@@ -22,7 +22,7 @@ func (db *DB) Subscriptions() ([]Subscription, error) {
   `
 	err := db.Select(&subs, query)
 	if err == sql.ErrNoRows {
-		err = errors.New("pg_stat_subscription is empty")
+		return subs, nil
 	}
 	return subs, err
 }
