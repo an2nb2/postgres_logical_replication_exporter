@@ -6,13 +6,11 @@ WORKDIR /src
 
 ENV CGO_ENABLED=0
 
-RUN go build -o ./bin/exporter -mod=readonly
+RUN go build -o ./bin/exporter -mod=readonly ./cmd
 
 
 FROM alpine:3.16
 
 COPY --from=build /src/bin/exporter /
-
-RUN apk add --no-cache libc6-compat
 
 ENTRYPOINT ["/exporter"]

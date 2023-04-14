@@ -34,3 +34,29 @@ Both roles (on primary and standby instances) require superuser priveleges as th
 | pg_logical_replication_publication_status      | Guage | Status of publication.                                                                  |
 | pg_logical_replication_publication_lag         | Guage | The amount of WAL records generated in the primary, but not yet sent to the standby.    |
 | pg_logical_replication_replication_slot_status | Guage | Status of replication slot.                                                             |
+
+## Local development
+
+This repo contains a compose file which facilitates local setup of postgres primary and standby instance. To run instances you will need either `docker`, `podman-compose` or `nerdctl`. To run compose execute following commands:
+
+```shell
+$ make start-db
+```
+
+To load seed data to databases run following command:
+
+```shell
+$ make seed-db
+```
+
+To stop database instances run:
+
+```shell
+$ make stop-db
+```
+
+To run the exporter locally using these databases run:
+
+```shell
+$ ./bin/exporter --primary-uri="postgres://primary:primary@localhost:9432/primary?sslmode=disable" --standby-uri="postgres://standby:standby@localhost:9442/standby?sslmode=disable"
+```

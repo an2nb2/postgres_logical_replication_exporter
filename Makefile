@@ -6,7 +6,8 @@ CGO_ENABLED = 0
 LDFLAGS     = -ldflags "-X main.version=${VERSION} -X main.commit=$$(git rev-parse --short HEAD 2>/dev/null || echo \"none\")"
 MOD         = -mod=readonly
 
-COMPOSECLI = $(shell command -v nerdctl || command -v docker || command -v podman-compose)
+COMPOSECLI   = $(shell command -v nerdctl || command -v docker || command -v podman-compose)
+CONTAINERCLI = $(shell command -v docker || command -v podman)
 
 build-prerequisites:
 	mkdir -p bin
@@ -42,7 +43,7 @@ clean:
 ### IMAGE ###################################################################
 
 image:
-	docker build -t postgres_logical_replication_exporter:${VERSION} .
+	$(CONTAINERCLI) build -t postgres_logical_replication_exporter:${VERSION} .
 
 
 ### LOCAL DEBUG #############################################################
@@ -54,12 +55,12 @@ stop-db:
 	$(COMPOSECLI) down
 
 seed-primary:
-	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < db/schema.sql
-	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < db/data.sql
-	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < db/publications.sql
+	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < db/fixtures/schema.sql
+	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < db/fixtures/data.sql
+	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < db/fixtures/primary.sql
 
 seed-standby:
-	PGUSER=standby PGPASSWORD=standby psql -h localhost -d standby -p 9442 < db/schema.sql
-	PGUSER=standby PGPASSWORD=standby psql -h localhost -d standby -p 9442 < db/subscriptions.sql
+	PGUSER=standby PGPASSWORD=standby psql -h localhost -d standby -p 9442 < db/fixtures/schema.sql
+	PGUSER=standby PGPASSWORD=standby psql -h localhost -d standby -p 9442 < db/fixtures/standby.sql
 
 seed-db: seed-primary seed-standby
