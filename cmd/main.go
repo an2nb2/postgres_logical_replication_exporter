@@ -2,9 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"net/http"
-	"os"
 	"postgres_logical_replication_exporter/collector"
 	"postgres_logical_replication_exporter/pg"
 	"time"
@@ -15,15 +13,15 @@ import (
 )
 
 var (
-	primaryuri string
-	standbyuri string
+	primaryURI string
+	standbyURI string
 	addr       string
 	loglevel   string
 )
 
 func init() {
-	flag.StringVar(&primaryuri, "primary-uri", "", "Connection URI of the primary instance host.")
-	flag.StringVar(&standbyuri, "standby-uri", "", "Connection URI of the standby instance host.")
+	flag.StringVar(&primaryURI, "primary-uri", "", "Connection URI of the primary instance host.")
+	flag.StringVar(&standbyURI, "standby-uri", "", "Connection URI of the standby instance host.")
 	flag.StringVar(&addr, "listen-address", ":9394", "The address to listen on for HTTP requests.")
 	flag.StringVar(&loglevel, "log-level", "info", "Level of the logs.")
 }
@@ -31,19 +29,15 @@ func init() {
 func main() {
 	flag.Parse()
 
-	logger, err := newLogger(loglevel)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to initialize logger: %v\n", err)
-		os.Exit(1)
-	}
+	logger := newLogger(loglevel)
 
-	primary := pg.MustConnect(primaryuri, 5)
-	standby := pg.MustConnect(standbyuri, 5)
+	primary := pg.MustConnect(primaryURI, 5)
+	standby := pg.MustConnect(standbyURI, 5)
+
+	reg := prometheus.NewRegistry()
+	reg.MustRegister(collector.NewCollector(primary, standby, logger))
 
 	mux := http.NewServeMux()
-	reg := prometheus.NewRegistry()
-
-	reg.MustRegister(collector.NewCollector(primary, standby, logger))
 
 	mux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte(`<html>
@@ -80,5 +74,5 @@ func main() {
 	}
 
 	_ = level.Info(logger).Log("msg", "Starting http server", "address", addr)
-	_ = level.Error(logger).Log("msg", "Error starting HTTP server", "err", server.ListenAndServe())
+	_ = level.Error(logger).Log("msg", "Server error", "err", server.ListenAndServe())
 }
