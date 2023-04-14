@@ -95,23 +95,23 @@ func (c *Collector) Describe(ch chan<- *prometheus.Desc) {
 func (c *Collector) Collect(ch chan<- prometheus.Metric) {
 	var err error
 
-	err = c.CollectSubscriptions(ch)
+	err = c.collectSubscriptions(ch)
 	if err != nil {
 		_ = level.Error(c.logger).Log("msg", "failed to collect subscriptions", "err", err)
 	}
 
-	err = c.CollectPublications(ch)
+	err = c.collectPublications(ch)
 	if err != nil {
 		_ = level.Error(c.logger).Log("msg", "failed to collect publications", "err", err)
 	}
 
-	err = c.CollectReplicationSlots(ch)
+	err = c.collectReplicationSlots(ch)
 	if err != nil {
 		_ = level.Error(c.logger).Log("msg", "failed to collect replication slots", "err", err)
 	}
 }
 
-func (c *Collector) CollectSubscriptions(ch chan<- prometheus.Metric) error {
+func (c *Collector) collectSubscriptions(ch chan<- prometheus.Metric) error {
 	subs, err := c.standby.Subscriptions()
 	if err != nil {
 		return err
@@ -155,7 +155,7 @@ func (c *Collector) CollectSubscriptions(ch chan<- prometheus.Metric) error {
 	return nil
 }
 
-func (c *Collector) CollectPublications(ch chan<- prometheus.Metric) error {
+func (c *Collector) collectPublications(ch chan<- prometheus.Metric) error {
 	pubs, err := c.primary.Publications()
 	if err != nil {
 		return err
@@ -199,7 +199,7 @@ func (c *Collector) CollectPublications(ch chan<- prometheus.Metric) error {
 	return nil
 }
 
-func (c *Collector) CollectReplicationSlots(ch chan<- prometheus.Metric) error {
+func (c *Collector) collectReplicationSlots(ch chan<- prometheus.Metric) error {
 	slots, err := c.primary.ReplicationSlots()
 	if err != nil {
 		return err
