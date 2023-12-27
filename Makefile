@@ -55,12 +55,12 @@ stop-db:
 	$(COMPOSECLI) down
 
 seed-primary:
-	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < db/fixtures/schema.sql
-	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < db/fixtures/data.sql
-	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < db/fixtures/primary.sql
+	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < testdata/fixtures/schema.sql
+	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < testdata/fixtures/data.sql
+	PGUSER=primary PGPASSWORD=primary psql -h localhost -d primary -p 9432 < testdata/fixtures/primary.sql
 
 seed-standby:
-	PGUSER=standby PGPASSWORD=standby psql -h localhost -d standby -p 9442 < db/fixtures/schema.sql
-	PGUSER=standby PGPASSWORD=standby psql -h localhost -d standby -p 9442 < db/fixtures/standby.sql
+	PGUSER=standby PGPASSWORD=standby psql -h localhost -d standby -p 9442 < testdata/fixtures/schema.sql
+	PGUSER=standby PGPASSWORD=standby psql -h localhost -d standby -p 9442 < testdata/fixtures/standby.sql
 
 seed-db: seed-primary seed-standby

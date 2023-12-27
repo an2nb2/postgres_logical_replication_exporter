@@ -1,8 +1,9 @@
 package collector
 
 import (
-	"postgres_logical_replication_exporter/pg"
 	"strconv"
+
+	"github.com/an2nb2/postgres_logical_replication_exporter/internal/pg"
 
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"

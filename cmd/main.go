@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"net/http"
-	"postgres_logical_replication_exporter/collector"
-	"postgres_logical_replication_exporter/pg"
 	"time"
+
+	"github.com/an2nb2/postgres_logical_replication_exporter/collector"
+	"github.com/an2nb2/postgres_logical_replication_exporter/internal/pg"
 
 	"github.com/go-kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"

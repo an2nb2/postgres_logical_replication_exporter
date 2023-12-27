@@ -1,4 +1,4 @@
-module postgres_logical_replication_exporter
+module github.com/an2nb2/postgres_logical_replication_exporter
 
 go 1.19
 
